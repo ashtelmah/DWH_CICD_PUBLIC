@@ -1,0 +1,2058 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="10/3/2024 8:39:57 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="HQ01IT22"
+  DTS:CreatorName="ORANTA\shtelmakh_ao"
+  DTS:DTSID="{62BF0AEC-69C5-4E50-A189-044350484E31}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5467.0"
+  DTS:LocaleID="1058"
+  DTS:ObjectName="Package1"
+  DTS:PackageType="5"
+  DTS:VersionBuild="32"
+  DTS:VersionGUID="{63A56322-FC8C-4099-B5D0-B0C5C69567AF}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[hq01db01.DataBus]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{953C2AD6-925A-4417-B3B8-B8245440B1C8}"
+      DTS:ObjectName="hq01db01.DataBus">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=hq01db01;Initial Catalog=DataBus;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package1-{953C2AD6-925A-4417-B3B8-B8245440B1C8}hq01db01.DataBus;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[orcl.oi]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{F788CFFB-A29C-4573-87AE-B20455392537}"
+      DTS:ObjectName="orcl.oi">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=orcl;User ID=oi;Provider=OraOLEDB.Oracle.1;Persist Security Info=True;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAGsNk5J5UUEyLkVMPsNA1CQAAAAAIAAAARABUAFMAAAADZgAAwAAAABAAAADRzUvQCoYKq/sHFMZHjcqVAAAAAASAAACgAAAAEAAAADakv5b1oPNgz3H6Yb8eekIwAAAAVC5aZoFYnHd1uwpnAkNH6GqDOtX+h4byc4mG2+dTzZHatmVnVFAobRPkpW7nm0d1FAAAAI+kHGadvZMIvmmFzTMkHeLbQVNf</DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{4EFB9675-F022-4DBC-B923-BD2B730C7AD4}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="&quot;SELECT a.oabarcode,a.oa_t1id, a.oa_nomerdog PolisNumber,a.oa_datadogbeg BeginningDate&#xA;, a.oa_to_buh&#xA;, a.oa_odergzkpo IpnEdrpo&#xA;,a.oa_serdog policy_id&#xA;,get_word(ext_pkd, 2, 4, '-') polis_id,&#xA;    get_word(ext_pkd, 3, 4, '-') prg_id,&#xA;    get_word(ext_pkd, 4, 4, '-') obj_id&#xA;    &#xA;    , t.t1_vid ProgramCode&#xA;   &#xA;    , t.t1_ovname&#xA;FROM oa a&#xA;Inner Join T1 t ON a.oa_t1id=t.T1_id&#xA;where  a.oa_to_buh &gt;= to_date('01-01-2023','dd-MM-yyyy')&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="OI">
+      <DTS:VariableValue
+        DTS:DataType="8">SELECT a.oabarcode,a.oa_t1id, a.oa_nomerdog PolisNumber,a.oa_datadogbeg BeginningDate
+, a.oa_to_buh
+, a.oa_odergzkpo IpnEdrpo
+,a.oa_serdog policy_id
+,get_word(ext_pkd, 2, 4, '-') polis_id,
+    get_word(ext_pkd, 3, 4, '-') prg_id,
+    get_word(ext_pkd, 4, 4, '-') obj_id
+    
+    , t.t1_vid ProgramCode
+   
+    , t.t1_ovname
+FROM oa a
+Inner Join T1 t ON a.oa_t1id=t.T1_id
+where  a.oa_to_buh &gt;= to_date('01-01-2023','dd-MM-yyyy')</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\BeneFiciary"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{2A8450DD-E178-4DD6-89E5-5771612F60DC}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="BeneFiciary"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{953C2AD6-925A-4417-B3B8-B8245440B1C8}"
+          SQLTask:SqlStatementSource="&#xA;UPDATE OI_Acts&#xA;SET  BeneficiaryPersonTypeId=a.PersonTypeID&#xA;From (&#xA;&#xA;Select f.PersonTypeID, a.oabarcode from &#xA;(Select f.PersonTypeID ,&#xA;Case when f.IdentificationCode='' then f.EDRPOU&#xA;else Isnull(f.IdentificationCode,f.EDRPOU) &#xA;end [InsurerInnEdrpo]&#xA;From  Metis.dbo.Faces f) f&#xA;Inner Join OI_Acts a ON a.BeneficiaryIpnEdrpo=f.[InsurerInnEdrpo]&#xA;&#xA;) a&#xA;Inner Join OI_Acts b ON b.oabarcode=a.oabarcode&#xA;GO&#xA;&#xA;UPDATE [DataBus].[dbo].[OI_Acts]&#xA;  SET BeneficiaryPersonTypeId=2&#xA;  Where  Len(BeneficiaryIpnEdrpo) &lt;9&#xA;  and BeneficiaryPersonTypeId is null&#xA;  GO&#xA;   UPDATE [DataBus].[dbo].[OI_Acts]&#xA;  SET BeneficiaryPersonTypeId=1&#xA;  Where  Len(BeneficiaryIpnEdrpo) &gt;8&#xA;  and BeneficiaryPersonTypeId is null&#xA;&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Execute SQL Task"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{BD71D5DC-64AA-4E98-B83C-96B169A71331}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Execute SQL Task"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{953C2AD6-925A-4417-B3B8-B8245440B1C8}"
+          SQLTask:SqlStatementSource="Truncate table OI_Acts&#xA;go" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\H015"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{332E823D-731A-40AD-A781-A0977950795A}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="H015"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{953C2AD6-925A-4417-B3B8-B8245440B1C8}"
+          SQLTask:SqlStatementSource="UPDATE OI_Acts&#xA;SET H015= z.H015&#xA;From&#xA;(&#xA; Select oabarcode,&#xA;  CASE &#xA;when PersonTypeId=1 AND  BeneficiaryPersonTypeId=1 AND InsurerInnEdrpo=ContragentInnEdrpo&#xA;then '6'&#xA;when PersonTypeId=1 AND  BeneficiaryPersonTypeId=1 AND InsurerInnEdrpo&lt;&gt;ContragentInnEdrpo&#xA;then 'A'&#xA;when PersonTypeId=1 AND  BeneficiaryPersonTypeId  in (2 ,3)&#xA;then 'B'&#xA;when PersonTypeId in (2 ,3) AND  BeneficiaryPersonTypeId  in (2 ,3) AND InsurerInnEdrpo=ContragentInnEdrpo&#xA;then '5'&#xA;when PersonTypeId  in (2 ,3) AND  BeneficiaryPersonTypeId  in (2 ,3) AND InsurerInnEdrpo&lt;&gt;ContragentInnEdrpo&#xA;then 'B'&#xA;when PersonTypeId in (2 ,3)  AND  BeneficiaryPersonTypeId=1 &#xA;then 'A'&#xA;End H015&#xA;From &#xA;(&#xA;Select a.oabarcode, a.InsurerInnEdrpo,a.PersonTypeId, a.BeneficiaryPersonTypeId&#xA; ,Case when s.IPNContragent='' then s.EDRPOUContragent&#xA;else Isnull(s.IPNContragent,s.EDRPOUContragent) &#xA;end [ContragentInnEdrpo]&#xA; from OI_Acts a&#xA; Inner Join IRPL0013_1CtoSolu s ON a.oabarcode=s.ActID&#xA; ) y&#xA; )z&#xA; INNER JOIN OI_Acts b ON b.oabarcode=z.oabarcode&#xA;&#xA;&#xA; GO&#xA; UPDATE OI_Acts&#xA;SET H015= z.H015&#xA;From&#xA;(&#xA; Select oabarcode,&#xA;  CASE &#xA;when PersonTypeId=1 AND  BeneficiaryPersonTypeId=1 AND InsurerInnEdrpo=BeneficiaryIpnEdrpo&#xA;then '6'&#xA;when PersonTypeId=1 AND  BeneficiaryPersonTypeId=1 AND InsurerInnEdrpo&lt;&gt;BeneficiaryIpnEdrpo&#xA;then 'A'&#xA;when PersonTypeId=1 AND  BeneficiaryPersonTypeId in (2 ,3)&#xA;then 'B'&#xA;when PersonTypeId in (2 ,3) AND  BeneficiaryPersonTypeId in (2 ,3) AND InsurerInnEdrpo=BeneficiaryIpnEdrpo&#xA;then '5'&#xA;when PersonTypeId in (2 ,3) AND  BeneficiaryPersonTypeId in (2 ,3) AND InsurerInnEdrpo&lt;&gt;BeneficiaryIpnEdrpo&#xA;then 'B'&#xA;when PersonTypeId in (2 ,3) AND  BeneficiaryPersonTypeId=1 &#xA;then 'A'&#xA;End H015&#xA;From &#xA;(&#xA;Select a.oabarcode, a.InsurerInnEdrpo,a.PersonTypeId, a.BeneficiaryPersonTypeId&#xA; ,a.BeneficiaryIpnEdrpo&#xA; from OI_Acts a&#xA;  ) y&#xA; )z&#xA; INNER JOIN OI_Acts b ON b.oabarcode=z.oabarcode&#xA; Where b.H015 is null&#xA;&#xA;&#xA;UPDATE [DataBus].[dbo].IRPL0013_1CtoSolu&#xA; SET  H015=a.H015&#xA; FROM&#xA;  (Select r.id   , m.H015 &#xA;  FROM [DataBus].[dbo].IRPL0013_1CtoSolu r&#xA;  Inner Join [DataBus].[dbo].[MedPayouts] m on m.ID_clime_act=r.ActID&#xA;  Where  r.H015=''&#xA;  )a, [DataBus].[dbo].IRPL0013_1CtoSolu b &#xA;  Where a.id=b.id&#xA;&#xA; UPDATE [DataBus].[dbo].IRPL0013_1CtoSolu&#xA;  SET H015=a.H015&#xA;  FROM&#xA;  (SELECT r.ID, '6' H015&#xA;  FROM [DataBus].[dbo].IRPL13 r&#xA;  Inner Join [DataBus].[dbo].IRPL0013_1CtoSolu s ON r.id=s.id&#xA;  where r.[H015]='' and r.H011='A2') a, [DataBus].[dbo].IRPL0013_1CtoSolu b&#xA;  Where a.id=b.id&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\H018"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{AEDC432C-4C86-4DA7-BBE8-A45B4072CF91}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="H018"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{953C2AD6-925A-4417-B3B8-B8245440B1C8}"
+          SQLTask:SqlStatementSource="&#xA; UPDATE OI_Acts&#xA; SET ProgramGid=a.gid&#xA; FROM&#xA; ( Select a.oabarcode, pg.gid&#xA;&#xA; FROM  Himalia..Products p &#xA; Inner Join Himalia..Programs pg on pg.ProductGID=p.gid&#xA; Inner Join Himalia.[meta].[ProgramTypes] pt ON pt.gid=pg.ProgramTypeGID&#xA; Inner Join  OI_Acts a ON a.ProductGid=p.gid and a.ProgramCode=pt.Code&#xA; )a&#xA; Inner join OI_Acts b ON  b.oabarcode= a.oabarcode&#xA;&#xA;GO&#xA;&#xA; UPDATE OI_Acts&#xA; SET  H011=b.H011&#xA; FROM [DataBus].[dbo].[OI_Acts] a&#xA;  Inner join IRPL0013_1CtoSolu b on a.oabarcode=b.ActID and a.ProgramCode=b.CodVidStrahuvannia&#xA;  Where a.H011&lt;&gt;b.H011 or a.H011 is null&#xA;&#xA;GO&#xA;&#xA;  &#xA; UPDATE OI_Acts&#xA; SET  H018=a.H018&#xA; FROM&#xA;  (Select a.oabarcode,a.ProgramCode&#xA;&#xA; , CASE &#xA;When b.H011 in ('A1','A2') and a.PersonTypeId=1 Then Cast ( '7'as nvarchar(2))&#xA;When b.H011 in ('A1','A2') and a.PersonTypeId in (2,3) Then Cast ( '8'as nvarchar(2))&#xA;Else Cast ( 'B'as nvarchar(2)) End H018 &#xA;   FROM [DataBus].[dbo].[OI_Acts] a&#xA;  Inner join IRPL0013_1CtoSolu b on a.oabarcode=b.ActID and a.ProgramCode=b.CodVidStrahuvannia&#xA;  )a&#xA;  Inner join DataBus.[dbo].[OI_Acts] b on a.oabarcode=b.oabarcode and a.ProgramCode=b.ProgramCode&#xA;   &#xA;&#xA;/*        Изменился вид страхования в Уране            */&#xA;&#xA; UPDATE OI_Acts&#xA; SET  H018=a.H018&#xA; FROM&#xA;  (Select distinct a.oabarcode,a.ProgramCode&#xA; , CASE &#xA;When b.H011 in ('A1','A2') and a.PersonTypeId=1 Then Cast ( '7'as nvarchar(2))&#xA;When b.H011 in ('A1','A2') and a.PersonTypeId in (2,3) Then Cast ( '8'as nvarchar(2))&#xA;Else Cast ( 'B'as nvarchar(2)) End H018 &#xA;   FROM [DataBus].[dbo].[OI_Acts] a&#xA;  Inner join IRPL0013_1CtoSolu b on a.oabarcode=b.ActID and b.CodVidStrahuvannia in (233,234) &#xA;  --and a.ProgramCode=b.CodVidStrahuvannia&#xA;  Where a.ProgramCode in (233,234)&#xA; &#xA;  and a.DateKey &gt; 20250101&#xA;  and a.H011&lt;&gt;b.H011 or a.H011 is null&#xA;&#xA;  )a&#xA;  Inner join DataBus.[dbo].[OI_Acts] b on a.oabarcode=b.oabarcode and b.H018 is null&#xA;  &#xA;&#xA;&#xA; UPDATE [DataBus].[dbo].IRPL0013_1CtoSolu&#xA; SET  H018=a.H018&#xA; FROM&#xA;  (Select r.id&#xA;&#xA; , CASE &#xA;When r.H011 in ('A1','A2') and m.InsurerType='Фіз. особа' Then Cast ( '7'as nvarchar(2))&#xA;When r.H011 in ('A1','A2') and m.InsurerType='Юр. особа'  Then Cast ( '8'as nvarchar(2))&#xA;Else Cast ( 'B'as nvarchar(2)) End H018 &#xA;  FROM [DataBus].[dbo].IRPL0013_1CtoSolu r&#xA;  Inner Join [DataBus].[dbo].[MedPayouts] m on m.ID_clime_act=r.ActID&#xA;  Where  H018=''&#xA;  )a, [DataBus].[dbo].IRPL0013_1CtoSolu b &#xA;  Where a.id=b.id&#xA;&#xA;&#xA;  UPDATE [DataBus].[dbo].IRPL0013_1CtoSolu&#xA;  SET H018=a.H018&#xA;  FROM&#xA;  (SELECT r.ID&#xA;,CASE When  r.H011='A2' then '7' else 'B' end H018 &#xA;  FROM [DataBus].[dbo].IRPL13 r&#xA;  Inner Join [DataBus].[dbo].IRPL0013_1CtoSolu s ON r.id=s.id&#xA;  where r.[H018]=''  ) a, [DataBus].[dbo].IRPL0013_1CtoSolu b&#xA;  Where a.id=b.id&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Insurer"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{1AC28807-92EA-4D71-BE75-576440415DF1}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Insurer"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{953C2AD6-925A-4417-B3B8-B8245440B1C8}"
+          SQLTask:SqlStatementSource="&#xA;UPDATE OI_Acts&#xA;SET InsurerFaceGID=a.InsurerFaceGID, PersonTypeId=a.PersonTypeID, [InsurerInnEdrpo]=a.InsurerInnEdrpo&#xA;,InsurerName=Left(a.Name,50)&#xA;From (&#xA;&#xA;select a.oabarcode, p.InsurerFaceGID,f.PersonTypeID, f.name&#xA;,Case when f.IdentificationCode='' then f.EDRPOU&#xA;else Isnull(f.IdentificationCode,f.EDRPOU) &#xA;end [InsurerInnEdrpo]&#xA;from Himalia..Products p &#xA;Inner Join OI_Acts a ON a.ProductGid=p.gid&#xA;Left join Metis.dbo.Faces f ON p.InsurerFaceGID=f.gid&#xA;) a&#xA;Inner Join OI_Acts b ON b.oabarcode=a.oabarcode&#xA;GO&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\OI"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{A562986A-AF2F-4D9E-AD77-BAB35C9DD2BC}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="OI"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\OI\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[OI_Acts]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\OI\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[hq01db01.DataBus]"
+                  connectionManagerRefId="Package.ConnectionManagers[hq01db01.DataBus]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[OABARCODE]"
+                      cachedCodepage="1251"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="OABARCODE"
+                      externalMetadataColumnId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[oabarcode]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[OABARCODE]" />
+                    <inputColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[OA_T1ID]"
+                      cachedDataType="numeric"
+                      cachedName="OA_T1ID"
+                      cachedPrecision="38"
+                      externalMetadataColumnId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[oa_t1id]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[OA_T1ID]" />
+                    <inputColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[OA_TO_BUH]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="OA_TO_BUH"
+                      externalMetadataColumnId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[oa_to_buh]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[OA_TO_BUH]" />
+                    <inputColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[POLIS_ID]"
+                      cachedCodepage="1251"
+                      cachedDataType="str"
+                      cachedLength="4000"
+                      cachedName="POLIS_ID"
+                      externalMetadataColumnId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[polis_id]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[POLIS_ID]" />
+                    <inputColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PRG_ID]"
+                      cachedCodepage="1251"
+                      cachedDataType="str"
+                      cachedLength="4000"
+                      cachedName="PRG_ID"
+                      externalMetadataColumnId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[prg_id]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[PRG_ID]" />
+                    <inputColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[OBJ_ID]"
+                      cachedCodepage="1251"
+                      cachedDataType="str"
+                      cachedLength="4000"
+                      cachedName="OBJ_ID"
+                      externalMetadataColumnId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[obj_id]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[OBJ_ID]" />
+                    <inputColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[T1_OVNAME]"
+                      cachedCodepage="1251"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="T1_OVNAME"
+                      externalMetadataColumnId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[t1_ovname]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[T1_OVNAME]" />
+                    <inputColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[POLISNUMBER]"
+                      cachedCodepage="1251"
+                      cachedDataType="str"
+                      cachedLength="150"
+                      cachedName="POLISNUMBER"
+                      externalMetadataColumnId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PolisNumber]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[POLISNUMBER]" />
+                    <inputColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[BEGINNINGDATE]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="BEGINNINGDATE"
+                      externalMetadataColumnId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[BeginningDate]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[BEGINNINGDATE]" />
+                    <inputColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PROGRAMCODE]"
+                      cachedDataType="numeric"
+                      cachedName="PROGRAMCODE"
+                      cachedPrecision="38"
+                      externalMetadataColumnId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ProgramCode]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[PROGRAMCODE]" />
+                    <inputColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[POLICY_ID]"
+                      cachedCodepage="1251"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="POLICY_ID"
+                      externalMetadataColumnId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[policy_ser]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[POLICY_ID]" />
+                    <inputColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[IPNEDRPO]"
+                      cachedCodepage="1251"
+                      cachedDataType="str"
+                      cachedLength="15"
+                      cachedName="IPNEDRPO"
+                      externalMetadataColumnId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[BeneficiaryIpnEdrpo]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[IPNEDRPO]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[id]"
+                      dataType="numeric"
+                      name="id"
+                      precision="18" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[oabarcode]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="oabarcode" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[oa_t1id]"
+                      dataType="i4"
+                      name="oa_t1id" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PolisNumber]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="PolisNumber" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[BeginningDate]"
+                      dataType="dbDate"
+                      name="BeginningDate" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[oa_to_buh]"
+                      dataType="dbDate"
+                      name="oa_to_buh" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[polis_id]"
+                      dataType="i4"
+                      name="polis_id" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[prg_id]"
+                      dataType="i4"
+                      name="prg_id" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[obj_id]"
+                      dataType="i4"
+                      name="obj_id" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ProgramCode]"
+                      codePage="1251"
+                      dataType="str"
+                      length="5"
+                      name="ProgramCode" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[t1_ovname]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="t1_ovname" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[H011]"
+                      codePage="1251"
+                      dataType="str"
+                      length="5"
+                      name="H011" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[H015]"
+                      codePage="1251"
+                      dataType="str"
+                      length="3"
+                      name="H015" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[H018]"
+                      codePage="1251"
+                      dataType="str"
+                      length="3"
+                      name="H018" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[LoadData]"
+                      dataType="dbTimeStamp"
+                      name="LoadData" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DateKey]"
+                      dataType="i4"
+                      name="DateKey" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[K030]"
+                      codePage="1251"
+                      dataType="str"
+                      length="2"
+                      name="K030" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[policy_ser]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="policy_ser" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsurerFaceGID]"
+                      dataType="guid"
+                      name="InsurerFaceGID" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PersonTypeId]"
+                      dataType="i4"
+                      name="PersonTypeId" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsurerInnEdrpo]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="InsurerInnEdrpo" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ProductGid]"
+                      dataType="guid"
+                      name="ProductGid" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[BeneficiaryIpnEdrpo]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="BeneficiaryIpnEdrpo" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[BeneficiaryPersonTypeId]"
+                      dataType="i4"
+                      name="BeneficiaryPersonTypeId" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ProgramGid]"
+                      dataType="guid"
+                      name="ProgramGid" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsurerName]"
+                      dataType="wstr"
+                      length="50"
+                      name="InsurerName" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\OI\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\OI\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\OI\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\OI\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\OI\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable">User::OI</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\OI\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[orcl.oi]"
+                  connectionManagerRefId="Package.ConnectionManagers[orcl.oi]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[OABARCODE]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OABARCODE]"
+                      length="50"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[OABARCODE]"
+                      name="OABARCODE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[OA_T1ID]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OA_T1ID]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[OA_T1ID]"
+                      name="OA_T1ID"
+                      precision="38"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[OA_TO_BUH]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OA_TO_BUH]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[OA_TO_BUH]"
+                      name="OA_TO_BUH"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[POLIS_ID]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[POLIS_ID]"
+                      length="4000"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[POLIS_ID]"
+                      name="POLIS_ID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[PRG_ID]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PRG_ID]"
+                      length="4000"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[PRG_ID]"
+                      name="PRG_ID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[OBJ_ID]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OBJ_ID]"
+                      length="4000"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[OBJ_ID]"
+                      name="OBJ_ID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[T1_OVNAME]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[T1_OVNAME]"
+                      length="50"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[T1_OVNAME]"
+                      name="T1_OVNAME"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[POLISNUMBER]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[POLISNUMBER]"
+                      length="150"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[POLISNUMBER]"
+                      name="POLISNUMBER"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[BEGINNINGDATE]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[BEGINNINGDATE]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[BEGINNINGDATE]"
+                      name="BEGINNINGDATE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[IPNEDRPO]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[IPNEDRPO]"
+                      length="15"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[IPNEDRPO]"
+                      name="IPNEDRPO"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[POLICY_ID]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[POLICY_ID]"
+                      length="10"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[POLICY_ID]"
+                      name="POLICY_ID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[PROGRAMCODE]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PROGRAMCODE]"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].Columns[PROGRAMCODE]"
+                      name="PROGRAMCODE"
+                      precision="38"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OABARCODE]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="OABARCODE" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OA_T1ID]"
+                      dataType="numeric"
+                      name="OA_T1ID"
+                      precision="38" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OA_TO_BUH]"
+                      dataType="dbTimeStamp"
+                      name="OA_TO_BUH" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[POLIS_ID]"
+                      codePage="1251"
+                      dataType="str"
+                      length="4000"
+                      name="POLIS_ID" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PRG_ID]"
+                      codePage="1251"
+                      dataType="str"
+                      length="4000"
+                      name="PRG_ID" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OBJ_ID]"
+                      codePage="1251"
+                      dataType="str"
+                      length="4000"
+                      name="OBJ_ID" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[T1_OVNAME]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="T1_OVNAME" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[POLISNUMBER]"
+                      codePage="1251"
+                      dataType="str"
+                      length="150"
+                      name="POLISNUMBER" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[BEGINNINGDATE]"
+                      dataType="dbTimeStamp"
+                      name="BEGINNINGDATE" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[IPNEDRPO]"
+                      codePage="1251"
+                      dataType="str"
+                      length="15"
+                      name="IPNEDRPO" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[POLICY_ID]"
+                      codePage="1251"
+                      dataType="str"
+                      length="10"
+                      name="POLICY_ID" />
+                    <externalMetadataColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PROGRAMCODE]"
+                      dataType="numeric"
+                      name="PROGRAMCODE"
+                      precision="38" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OABARCODE]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OABARCODE]"
+                      name="OABARCODE" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OA_T1ID]"
+                      dataType="numeric"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OA_T1ID]"
+                      name="OA_T1ID"
+                      precision="38" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[POLISNUMBER]"
+                      codePage="1251"
+                      dataType="str"
+                      length="150"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[POLISNUMBER]"
+                      name="POLISNUMBER" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[BEGINNINGDATE]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[BEGINNINGDATE]"
+                      name="BEGINNINGDATE" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OA_TO_BUH]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OA_TO_BUH]"
+                      name="OA_TO_BUH" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[IPNEDRPO]"
+                      codePage="1251"
+                      dataType="str"
+                      length="15"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[IPNEDRPO]"
+                      name="IPNEDRPO" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[POLICY_ID]"
+                      codePage="1251"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[POLICY_ID]"
+                      name="POLICY_ID" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[POLIS_ID]"
+                      codePage="1251"
+                      dataType="str"
+                      length="4000"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[POLIS_ID]"
+                      name="POLIS_ID" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PRG_ID]"
+                      codePage="1251"
+                      dataType="str"
+                      length="4000"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PRG_ID]"
+                      name="PRG_ID" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OBJ_ID]"
+                      codePage="1251"
+                      dataType="str"
+                      length="4000"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OBJ_ID]"
+                      name="OBJ_ID" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PROGRAMCODE]"
+                      dataType="numeric"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PROGRAMCODE]"
+                      name="PROGRAMCODE"
+                      precision="38" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[T1_OVNAME]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[T1_OVNAME]"
+                      name="T1_OVNAME" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\OI\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\OI.Paths[OLE DB Source Output]"
+              endId="Package\OI\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="OLE DB Source Output"
+              startId="Package\OI\OLE DB Source.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\UpdateProducts"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{2338709B-2E78-434D-B373-599AC2C48FEC}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="UpdateProducts"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{953C2AD6-925A-4417-B3B8-B8245440B1C8}"
+          SQLTask:SqlStatementSource="-- DMS UPDATE&#xA;UPDATE OI_Acts&#xA;SET ProductGid= a.gid&#xA;From (&#xA;Select a.oabarcode, gid from Himalia..Products p &#xA;Inner join OI_Acts a ON a.[policy_ser]=p.id and a.t1_ovname='ДМС'&#xA;) a&#xA;Inner Join OI_Acts b ON b.oabarcode=a.oabarcode&#xA;GO&#xA;&#xA;-- OTHER&#xA;&#xA;&#xA;UPDATE OI_Acts&#xA;SET ProductGid= a.gid&#xA;From (&#xA;Select a.oabarcode, gid from Himalia..Products p &#xA;Inner join OI_Acts a ON a.polis_id=p.id &#xA;Where a.ProductGid is null&#xA;) a&#xA;Inner Join OI_Acts b ON b.oabarcode=a.oabarcode&#xA;GO&#xA;&#xA;-- SER + Number + Date&#xA;UPDATE OI_Acts&#xA;SET ProductGid= a.gid&#xA;From (&#xA;Select a.oabarcode, gid from Himalia..Products p &#xA;Inner Join OI_Acts a ON a.BeginningDate=p.BeginingDate&#xA;and p.PolisNumber like CAST(a.policy_ser+ '-' +a.PolisNumber as varchar(50))&#xA;where a.ProductGid is null &#xA;) a&#xA;Inner Join OI_Acts b ON b.oabarcode=a.oabarcode&#xA;GO&#xA;&#xA;&#xA;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\URAN"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{BD4E9C11-8509-48E2-BEA8-7B52C2958F41}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="URAN"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\URAN\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[OI_Acts]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\URAN\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[hq01db01.DataBus]"
+                  connectionManagerRefId="Package.ConnectionManagers[hq01db01.DataBus]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ProductGid]"
+                      cachedDataType="guid"
+                      cachedName="ProductGid"
+                      externalMetadataColumnId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ProductGid]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[ProductGid]" />
+                    <inputColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PolisNumber]"
+                      cachedCodepage="1251"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="PolisNumber"
+                      externalMetadataColumnId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PolisNumber]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[PolisNumber]" />
+                    <inputColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ProgramCode]"
+                      cachedCodepage="1251"
+                      cachedDataType="str"
+                      cachedLength="5"
+                      cachedName="ProgramCode"
+                      externalMetadataColumnId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ProgramCode]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[ProgramCode]" />
+                    <inputColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[InsurerFaceGID]"
+                      cachedDataType="guid"
+                      cachedName="InsurerFaceGID"
+                      externalMetadataColumnId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsurerFaceGID]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsurerFaceGID]" />
+                    <inputColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PersonTypeID]"
+                      cachedDataType="i8"
+                      cachedName="PersonTypeID"
+                      externalMetadataColumnId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PersonTypeId]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[PersonTypeID]" />
+                    <inputColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[InsurerInnEdrpo]"
+                      cachedCodepage="1251"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="InsurerInnEdrpo"
+                      externalMetadataColumnId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsurerInnEdrpo]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsurerInnEdrpo]" />
+                    <inputColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[act_id]"
+                      cachedDataType="i4"
+                      cachedName="act_id"
+                      externalMetadataColumnId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[oabarcode]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[act_id]" />
+                    <inputColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[claim_id]"
+                      cachedDataType="i8"
+                      cachedName="claim_id"
+                      externalMetadataColumnId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[oa_t1id]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[claim_id]" />
+                    <inputColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[InsurerName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="InsurerName"
+                      externalMetadataColumnId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsurerName]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsurerName]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[id]"
+                      dataType="numeric"
+                      name="id"
+                      precision="18" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ProductGid]"
+                      dataType="guid"
+                      name="ProductGid" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ProgramGid]"
+                      dataType="guid"
+                      name="ProgramGid" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[oabarcode]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="oabarcode" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[oa_t1id]"
+                      dataType="i4"
+                      name="oa_t1id" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PolisNumber]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="PolisNumber" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[BeginningDate]"
+                      dataType="dbDate"
+                      name="BeginningDate" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[oa_to_buh]"
+                      dataType="dbDate"
+                      name="oa_to_buh" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[policy_ser]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="policy_ser" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[polis_id]"
+                      dataType="i4"
+                      name="polis_id" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[prg_id]"
+                      dataType="i4"
+                      name="prg_id" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[obj_id]"
+                      dataType="i4"
+                      name="obj_id" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ProgramCode]"
+                      codePage="1251"
+                      dataType="str"
+                      length="5"
+                      name="ProgramCode" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[t1_ovname]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="t1_ovname" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[BeneficiaryIpnEdrpo]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="BeneficiaryIpnEdrpo" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[BeneficiaryPersonTypeId]"
+                      dataType="i4"
+                      name="BeneficiaryPersonTypeId" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsurerFaceGID]"
+                      dataType="guid"
+                      name="InsurerFaceGID" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PersonTypeId]"
+                      dataType="i4"
+                      name="PersonTypeId" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsurerInnEdrpo]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="InsurerInnEdrpo" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[H011]"
+                      codePage="1251"
+                      dataType="str"
+                      length="5"
+                      name="H011" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[H015]"
+                      codePage="1251"
+                      dataType="str"
+                      length="3"
+                      name="H015" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[H018]"
+                      codePage="1251"
+                      dataType="str"
+                      length="3"
+                      name="H018" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[LoadData]"
+                      dataType="dbTimeStamp"
+                      name="LoadData" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DateKey]"
+                      dataType="i4"
+                      name="DateKey" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[K030]"
+                      codePage="1251"
+                      dataType="str"
+                      length="2"
+                      name="K030" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsurerName]"
+                      dataType="wstr"
+                      length="50"
+                      name="InsurerName" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\URAN\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\URAN\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\URAN\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\URAN\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">Select C.id claim_id, Cast(C.Number as varchar) claim_no
+, D.id act_id , CAST(D.Number as varchar) act_no
+	,P.gid as ProductGid, CAST(C.PolisNumber as varchar(50)) PolisNumber 
+	,CAST( PT.Code as varchar(5)) ProgramCode
+	,P.InsurerFaceGID
+	,f.PersonTypeID
+, Left(f.Name,50)  InsurerName
+	,Case when f.IdentificationCode='' then CAST( f.EDRPOU as varchar(50)) 
+else CAST(Isnull(f.IdentificationCode,f.EDRPOU) as varchar(50)) 
+end [InsurerInnEdrpo]
+	from Oberon.dbo.Cases AS C 
+	Inner join Oberon.dbo.CasesDocuments AS CD
+	ON C.gid =CD.CaseGID
+	INNER JOIN Oberon.dbo.Documents AS D
+      ON D.gid = CD.DocumentGID
+         AND D.Deleted = 0 
+	INNER JOIN [DataBus].[dbo].[IRPL0013_1CtoSolu] db
+	   	ON db.ActID = Cast(D.id as varchar(50))
+	INNER JOIN Himalia..Products AS P ON P.PolisNumber =C.PolisNumber
+	Inner Join Himalia..Programs pg on pg.ProductGID=p.gid
+   Inner Join Himalia.[meta].[ProgramTypes] pt ON pt.gid=pg.ProgramTypeGID
+	Inner Join Metis.dbo.Faces f on P.InsurerFaceGID=f.gid</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\URAN\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[hq01db01.DataBus]"
+                  connectionManagerRefId="Package.ConnectionManagers[hq01db01.DataBus]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[claim_id]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[claim_id]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[claim_id]"
+                      name="claim_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[claim_no]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[claim_no]"
+                      length="30"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[claim_no]"
+                      name="claim_no"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[act_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[act_id]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[act_id]"
+                      name="act_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[act_no]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[act_no]"
+                      length="30"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[act_no]"
+                      name="act_no"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[ProductGid]"
+                      dataType="guid"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ProductGid]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[ProductGid]"
+                      name="ProductGid"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[PolisNumber]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PolisNumber]"
+                      length="50"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[PolisNumber]"
+                      name="PolisNumber"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[ProgramCode]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ProgramCode]"
+                      length="5"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[ProgramCode]"
+                      name="ProgramCode"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsurerFaceGID]"
+                      dataType="guid"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InsurerFaceGID]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsurerFaceGID]"
+                      name="InsurerFaceGID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[PersonTypeID]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PersonTypeID]"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[PersonTypeID]"
+                      name="PersonTypeID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsurerInnEdrpo]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InsurerInnEdrpo]"
+                      length="50"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsurerInnEdrpo]"
+                      name="InsurerInnEdrpo"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsurerName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InsurerName]"
+                      length="255"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsurerName]"
+                      name="InsurerName"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[claim_id]"
+                      dataType="i8"
+                      name="claim_id" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[claim_no]"
+                      codePage="1251"
+                      dataType="str"
+                      length="30"
+                      name="claim_no" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[act_id]"
+                      dataType="i4"
+                      name="act_id" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[act_no]"
+                      codePage="1251"
+                      dataType="str"
+                      length="30"
+                      name="act_no" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ProductGid]"
+                      dataType="guid"
+                      name="ProductGid" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PolisNumber]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="PolisNumber" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ProgramCode]"
+                      codePage="1251"
+                      dataType="str"
+                      length="5"
+                      name="ProgramCode" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InsurerFaceGID]"
+                      dataType="guid"
+                      name="InsurerFaceGID" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PersonTypeID]"
+                      dataType="i8"
+                      name="PersonTypeID" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InsurerInnEdrpo]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="InsurerInnEdrpo" />
+                    <externalMetadataColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InsurerName]"
+                      dataType="wstr"
+                      length="50"
+                      name="InsurerName" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[claim_id]"
+                      dataType="i8"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[claim_id]"
+                      name="claim_id" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[claim_no]"
+                      codePage="1251"
+                      dataType="str"
+                      length="30"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[claim_no]"
+                      name="claim_no" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[act_id]"
+                      dataType="i4"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[act_id]"
+                      name="act_id" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[act_no]"
+                      codePage="1251"
+                      dataType="str"
+                      length="30"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[act_no]"
+                      name="act_no" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ProductGid]"
+                      dataType="guid"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ProductGid]"
+                      name="ProductGid" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PolisNumber]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PolisNumber]"
+                      name="PolisNumber" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ProgramCode]"
+                      codePage="1251"
+                      dataType="str"
+                      length="5"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ProgramCode]"
+                      name="ProgramCode" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InsurerFaceGID]"
+                      dataType="guid"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InsurerFaceGID]"
+                      name="InsurerFaceGID" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PersonTypeID]"
+                      dataType="i8"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PersonTypeID]"
+                      name="PersonTypeID" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InsurerName]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InsurerName]"
+                      name="InsurerName" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InsurerInnEdrpo]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InsurerInnEdrpo]"
+                      name="InsurerInnEdrpo" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\URAN.Paths[OLE DB Source Output]"
+              endId="Package\URAN\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="OLE DB Source Output"
+              startId="Package\URAN\OLE DB Source.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\UranBeneficiary"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{20500BA9-04CA-42B7-87CC-1BF24F0855E3}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="UranBeneficiary"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{953C2AD6-925A-4417-B3B8-B8245440B1C8}"
+          SQLTask:SqlStatementSource="UPDATE OI_Acts&#xA;SET BeneficiaryIpnEdrpo= a.InsurerInnEdrpo&#xA;From &#xA;(&#xA;SELECT &#xA;      [ActID],CodVidStrahuvannia&#xA;&#x9;  ,Case when [IPNContragent]='' then CAST( [EDRPOUContragent] as nvarchar(50)) &#xA;else CAST(Isnull([IPNContragent],[EDRPOUContragent]) as nvarchar(50)) &#xA;end [InsurerInnEdrpo]&#xA;    &#xA;  FROM [DataBus].[dbo].[IRPL0013_1CtoSolu]&#xA;  ) a&#xA;  Inner Join OI_Acts b on a.ActID=b.oabarcode and b.ProgramCode=a.CodVidStrahuvannia&#xA;&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{F9FCF1AB-4A4C-495B-A125-846B2BC62F74}"
+      DTS:From="Package\Execute SQL Task"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\OI" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{06121AC3-67F6-477C-907F-F3E86E92833F}"
+      DTS:From="Package\OI"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\UpdateProducts" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{0A9B192B-2183-4812-B314-621FF2716AB3}"
+      DTS:From="Package\UpdateProducts"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Insurer" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{3B9CAF1C-05CB-4A3C-92C0-EFC7DD3C70E8}"
+      DTS:From="Package\Insurer"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\URAN" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
+      DTS:CreationName=""
+      DTS:DTSID="{B81FB17A-4DA3-45E6-93F2-46B5197B926A}"
+      DTS:From="Package\BeneFiciary"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4"
+      DTS:To="Package\H018" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 5]"
+      DTS:CreationName=""
+      DTS:DTSID="{8D75221D-5148-4642-A907-45EE5ED4295F}"
+      DTS:From="Package\H018"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 5"
+      DTS:To="Package\H015" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 6]"
+      DTS:CreationName=""
+      DTS:DTSID="{02789B35-B5FB-4176-88D0-8AB5875433B9}"
+      DTS:From="Package\URAN"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 6"
+      DTS:To="Package\UranBeneficiary" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 7]"
+      DTS:CreationName=""
+      DTS:DTSID="{79F97EF7-0B27-405B-B057-92CC7FEA7089}"
+      DTS:From="Package\UranBeneficiary"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 7"
+      DTS:To="Package\BeneFiciary" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="133,42"
+          Id="Package\BeneFiciary"
+          TopLeft="381,270" />
+        <NodeLayout
+          Size="163,42"
+          Id="Package\Execute SQL Task"
+          TopLeft="88,57" />
+        <NodeLayout
+          Size="104,42"
+          Id="Package\H015"
+          TopLeft="737,259" />
+        <NodeLayout
+          Size="104,42"
+          Id="Package\H018"
+          TopLeft="561,268" />
+        <NodeLayout
+          Size="113,42"
+          Id="Package\Insurer"
+          TopLeft="313,50" />
+        <NodeLayout
+          Size="91,42"
+          Id="Package\OI"
+          TopLeft="98,140" />
+        <NodeLayout
+          Size="153,42"
+          Id="Package\UpdateProducts"
+          TopLeft="171,233" />
+        <NodeLayout
+          Size="106,42"
+          Id="Package\URAN"
+          TopLeft="460,59" />
+        <NodeLayout
+          Size="153,42"
+          Id="Package\UranBeneficiary"
+          TopLeft="455,166" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="169.5,99">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-26,41"
+              Start="0,0"
+              End="-26,33.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.5"
+                    Point2="0,20.5"
+                    Point3="-4,20.5" />
+                  <mssgle:LineSegment
+                    End="-22,20.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-22,20.5"
+                    Point2="-26,20.5"
+                    Point3="-26,24.5" />
+                  <mssgle:LineSegment
+                    End="-26,33.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="143.5,182">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="79.8333333333333,51"
+              Start="0,0"
+              End="79.8333333333333,43.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26.2833117723157" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,26.2833117723157"
+                    Point2="0,30.2833117723157"
+                    Point3="4,30.2833117723157" />
+                  <mssgle:LineSegment
+                    End="75.8333333333333,30.2833117723157" />
+                  <mssgle:CubicBezierSegment
+                    Point1="75.8333333333333,30.2833117723157"
+                    Point2="79.8333333333333,30.2833117723157"
+                    Point3="79.8333333333333,34.2833117723157" />
+                  <mssgle:LineSegment
+                    End="79.8333333333333,43.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="271.666666666667,233">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="97.8333333333334,-141"
+              Start="0,0"
+              End="97.8333333333334,-133.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,-53.2755498059509" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,-53.2755498059509"
+                    Point2="0,-57.2755498059509"
+                    Point3="4,-57.2755498059509" />
+                  <mssgle:LineSegment
+                    End="93.8333333333334,-57.2755498059509" />
+                  <mssgle:CubicBezierSegment
+                    Point1="93.8333333333334,-57.2755498059509"
+                    Point2="97.8333333333334,-57.2755498059509"
+                    Point3="97.8333333333334,-61.2755498059509" />
+                  <mssgle:LineSegment
+                    End="97.8333333333334,-133.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="426,71">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="34,9"
+              Start="0,0"
+              End="26.5,9">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="13,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="13,0"
+                    Point2="17,0"
+                    Point3="17,4" />
+                  <mssgle:LineSegment
+                    End="17,5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="17,5"
+                    Point2="17,9"
+                    Point3="21,9" />
+                  <mssgle:LineSegment
+                    End="26.5,9" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="514,290">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="47,0"
+              Start="0,0"
+              End="39.5,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="39.5,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 5]"
+          TopLeft="665,289">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="72,-9"
+              Start="0,0"
+              End="64.5,-9">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="32,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="32,0"
+                    Point2="36,0"
+                    Point3="36,-4" />
+                  <mssgle:LineSegment
+                    End="36,-5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="36,-5"
+                    Point2="36,-9"
+                    Point3="40,-9" />
+                  <mssgle:LineSegment
+                    End="64.5,-9" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 6]"
+          TopLeft="513,101">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="18.5,65"
+              Start="0,0"
+              End="18.5,57.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,28.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,28.5"
+                    Point2="0,32.5"
+                    Point3="4,32.5" />
+                  <mssgle:LineSegment
+                    End="14.5,32.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="14.5,32.5"
+                    Point2="18.5,32.5"
+                    Point3="18.5,36.5" />
+                  <mssgle:LineSegment
+                    End="18.5,57.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 7]"
+          TopLeft="531.5,208">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-84,62"
+              Start="0,0"
+              End="-84,54.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,27" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,27"
+                    Point2="0,31"
+                    Point3="-4,31" />
+                  <mssgle:LineSegment
+                    End="-80,31" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-80,31"
+                    Point2="-84,31"
+                    Point3="-84,35" />
+                  <mssgle:LineSegment
+                    End="-84,54.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\OI">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="171,42"
+          Id="Package\OI\OLE DB Destination"
+          TopLeft="95,200" />
+        <NodeLayout
+          Size="150,42"
+          Id="Package\OI\OLE DB Source"
+          TopLeft="78,52" />
+        <EdgeLayout
+          Id="Package\OI.Paths[OLE DB Source Output]"
+          TopLeft="153,94">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="27.5,106"
+              Start="0,0"
+              End="27.5,98.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,49" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,49"
+                    Point2="0,53"
+                    Point3="4,53" />
+                  <mssgle:LineSegment
+                    End="23.5,53" />
+                  <mssgle:CubicBezierSegment
+                    Point1="23.5,53"
+                    Point2="27.5,53"
+                    Point3="27.5,57" />
+                  <mssgle:LineSegment
+                    End="27.5,98.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\OI\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\OI\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\URAN">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="150,42"
+          Id="Package\URAN\OLE DB Source"
+          TopLeft="114,46" />
+        <NodeLayout
+          Size="171,42"
+          Id="Package\URAN\OLE DB Destination"
+          TopLeft="109,172" />
+        <EdgeLayout
+          Id="Package\URAN.Paths[OLE DB Source Output]"
+          TopLeft="191.75,88">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,84"
+              Start="0,0"
+              End="0,76.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,76.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\URAN\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\URAN\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

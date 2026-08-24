@@ -1,0 +1,1489 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="7/7/2026 2:05:52 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="HQ01IT22"
+  DTS:CreatorName="ORANTA\shtelmakh_ao"
+  DTS:DTSID="{6EC7A01B-FCEA-4F26-B37D-960F872739CE}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5467.0"
+  DTS:LocaleID="1058"
+  DTS:ObjectName="Package2"
+  DTS:PackageType="5"
+  DTS:VersionBuild="29"
+  DTS:VersionGUID="{34416680-C121-461A-8F39-0D7250220CE0}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[hq01db01.DataBus]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{3B4791C8-B121-4F18-A718-5D5E85F6F8B9}"
+      DTS:ObjectName="hq01db01.DataBus">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=hq01db01;Initial Catalog=DataBus;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package2-{3B4791C8-B121-4F18-A718-5D5E85F6F8B9}hq01db01.DataBus;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[hq01db02.Accounts]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{EA537F56-00A2-4F72-A287-06454344BBDC}"
+      DTS:ObjectName="hq01db02.Accounts">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=hq01db02;Initial Catalog=Accounts;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package2-{EA537F56-00A2-4F72-A287-06454344BBDC}hq01db02.Accounts;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="3"
+      DTS:DTSID="{812CA275-22EC-48CB-9C76-11D08C5613EE}"
+      DTS:ObjectName="DateEnd">
+      <DTS:Property
+        DTS:DataType="3"
+        DTS:Name="ParameterValue">20260601</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="3"
+      DTS:DTSID="{433BBBF8-C4FB-4110-B1A1-B451BC31701A}"
+      DTS:ObjectName="DateStart">
+      <DTS:Property
+        DTS:DataType="3"
+        DTS:Name="ParameterValue">20231201</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\CLEAR"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{1E79317A-147F-4CC5-8945-4495AC4F0A26}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="CLEAR"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{3B4791C8-B121-4F18-A718-5D5E85F6F8B9}"
+          SQLTask:SqlStatementSource="Declare @DateStart int = ? , @DateEnd int = ? &#xA;Delete from dbo.NBU_KZ_Terminated &#xA;Where DateKey between @DateStart  and @DateEnd &#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="0"
+            SQLTask:DtsVariableName="$Package::DateStart"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="131"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="1"
+            SQLTask:DtsVariableName="$Package::DateEnd"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="131"
+            SQLTask:ParameterSize="-1" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\STG_Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{21760E07-7D41-4118-B8A1-4E06E2F504F7}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="STG_Table"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{EA537F56-00A2-4F72-A287-06454344BBDC}"
+          SQLTask:SqlStatementSource="Declare      @PeriodB int  = ? ,   @PeriodE int  = ? &#xA;&#xA;&#xA;IF OBJECT_ID('dbo.PG7PG5_Stage_V1') IS NOT NULL&#xA;    DROP TABLE dbo.PG7PG5_Stage_V1&#xA;&#xA;&#xA;CREATE TABLE dbo.PG7PG5_Stage_V1&#xA;(&#xA;    PgType          nvarchar(10),&#xA;    Period          bigint,&#xA;    ProgramGid      uniqueidentifier,&#xA;    PolisNumber     nvarchar(50),&#xA;    InsType         nvarchar(10),&#xA;  InsClass         varchar(2),&#xA;&#x9;    Dir         nvarchar(3),&#xA;    BeginingDate    datetime,&#xA;    CancelDate      datetime,&#xA;    FaceINN         nvarchar(20),&#xA;    PaymentPeriod   nvarchar(20),&#xA;    PlanedSum       decimal(18,2),&#xA;    RAvans          decimal(18,2),&#xA;    OnReturnSum     decimal(18,2),&#xA;&#x9;    Comment         nvarchar(200)  &#xA;&#xA;)&#xA;&#xA;INSERT INTO  dbo.PG7PG5_Stage_V1&#xA;(&#xA;    PgType,&#xA;    Period,&#xA;    ProgramGid,&#xA;    PolisNumber,&#xA;    InsType,&#xA;&#x9;Dir,&#xA;    BeginingDate,&#xA;    CancelDate,&#xA;    FaceINN,&#xA;    PaymentPeriod,&#xA;    PlanedSum,&#xA;    RAvans,&#xA;    OnReturnSum,&#xA;&#x9;    Comment         &#xA;)&#xA;&#xA;EXEC dbo.PG7PG5_V1  @PeriodB , @PeriodE&#xA;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="0"
+            SQLTask:DtsVariableName="$Package::DateStart"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="3"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="1"
+            SQLTask:DtsVariableName="$Package::DateEnd"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="3"
+            SQLTask:ParameterSize="-1" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\ToDataBus"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{3F2158F9-D0B0-40FF-A6A2-ED2C3CFF5F2C}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="ToDataBus"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\ToDataBus\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[NBU_KZ_Terminated]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ToDataBus\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[hq01db01.DataBus]"
+                  connectionManagerRefId="Package.ConnectionManagers[hq01db01.DataBus]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PolisNumber]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="PolisNumber"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PolisNumber]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[PolisNumber]" />
+                    <inputColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[InsType]"
+                      cachedDataType="wstr"
+                      cachedLength="10"
+                      cachedName="InsType"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsType]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsType]" />
+                    <inputColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[BeginingDate]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="BeginingDate"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[BeginingDate]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[BeginingDate]" />
+                    <inputColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[CancelDate]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="CancelDate"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CancelDate]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[CancelDate]" />
+                    <inputColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PlanedSum]"
+                      cachedDataType="numeric"
+                      cachedName="PlanedSum"
+                      cachedPrecision="38"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PlanedSum]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[PlanedSum]" />
+                    <inputColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[OnReturnSum]"
+                      cachedDataType="numeric"
+                      cachedName="OnReturnSum"
+                      cachedPrecision="38"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[OnReturnSum]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[OnReturnSum]" />
+                    <inputColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[DateKey]"
+                      cachedDataType="i8"
+                      cachedName="DateKey"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DateKey]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[DateKey]" />
+                    <inputColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Comment]"
+                      cachedDataType="wstr"
+                      cachedLength="200"
+                      cachedName="Comment"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Comment]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[Comment]" />
+                    <inputColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Initiators]"
+                      cachedCodepage="1251"
+                      cachedDataType="str"
+                      cachedLength="13"
+                      cachedName="Initiators"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Initiators]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[Initiators]" />
+                    <inputColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[InsClass]"
+                      cachedCodepage="1251"
+                      cachedDataType="str"
+                      cachedLength="2"
+                      cachedName="InsClass"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsClass]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsClass]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[id]"
+                      dataType="i8"
+                      name="id" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PolisNumber]"
+                      dataType="wstr"
+                      length="255"
+                      name="PolisNumber" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsType]"
+                      dataType="i4"
+                      name="InsType" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[BeginingDate]"
+                      dataType="dbDate"
+                      name="BeginingDate" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CancelDate]"
+                      dataType="dbDate"
+                      name="CancelDate" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PlanedSum]"
+                      dataType="numeric"
+                      name="PlanedSum"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[OnReturnSum]"
+                      dataType="numeric"
+                      name="OnReturnSum"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DateKey]"
+                      dataType="i8"
+                      name="DateKey" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Comment]"
+                      dataType="wstr"
+                      length="250"
+                      name="Comment" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Initiators]"
+                      codePage="1251"
+                      dataType="str"
+                      length="50"
+                      name="Initiators" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsClass]"
+                      codePage="1251"
+                      dataType="str"
+                      length="2"
+                      name="InsClass" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ToDataBus\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ToDataBus\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ToDataBus\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ToDataBus\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[PG7PG5_Stage]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">SELECT 
+    PolisNumber,
+    InsType,
+InsClass,
+    BeginingDate ,
+   CancelDate ,
+    SUM(PlanedSum) PlanedSum,
+    SUM(RAvans + OnReturnSum) OnReturnSum ,
+	ISNULL(Comment, 'за згодою сторін' ) Comment,
+	'Страхувальник' Initiators,
+    --CAST ( FaceINN as nvarchar(20)) INNEDRPOU ,
+    Period as DateKey
+FROM  Accounts.dbo.PG7PG5_Stage_V1
+GROUP BY 
+    PolisNumber,
+    InsType, InsClass,
+    BeginingDate,
+    CancelDate,
+    Period,
+    Comment</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ToDataBus\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[hq01db02.Accounts]"
+                  connectionManagerRefId="Package.ConnectionManagers[hq01db02.Accounts]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[PolisNumber]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PolisNumber]"
+                      length="50"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[PolisNumber]"
+                      name="PolisNumber"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InsType]"
+                      length="10"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsType]"
+                      name="InsType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[BeginingDate]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[BeginingDate]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[BeginingDate]"
+                      name="BeginingDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[CancelDate]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CancelDate]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[CancelDate]"
+                      name="CancelDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[PlanedSum]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PlanedSum]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[PlanedSum]"
+                      name="PlanedSum"
+                      precision="38"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[OnReturnSum]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OnReturnSum]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[OnReturnSum]"
+                      name="OnReturnSum"
+                      precision="38"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[DateKey]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DateKey]"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[DateKey]"
+                      name="DateKey"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[Comment]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Comment]"
+                      length="200"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[Comment]"
+                      name="Comment"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[Initiators]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Initiators]"
+                      length="13"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[Initiators]"
+                      name="Initiators"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsClass]"
+                      codePage="1251"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InsClass]"
+                      length="2"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsClass]"
+                      name="InsClass"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PolisNumber]"
+                      dataType="wstr"
+                      length="50"
+                      name="PolisNumber" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InsType]"
+                      dataType="wstr"
+                      length="10"
+                      name="InsType" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[BeginingDate]"
+                      dataType="dbTimeStamp"
+                      name="BeginingDate" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CancelDate]"
+                      dataType="dbTimeStamp"
+                      name="CancelDate" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PlanedSum]"
+                      dataType="numeric"
+                      name="PlanedSum"
+                      precision="38"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OnReturnSum]"
+                      dataType="numeric"
+                      name="OnReturnSum"
+                      precision="38"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DateKey]"
+                      dataType="i8"
+                      name="DateKey" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Comment]"
+                      dataType="wstr"
+                      length="200"
+                      name="Comment" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Initiators]"
+                      codePage="1251"
+                      dataType="str"
+                      length="13"
+                      name="Initiators" />
+                    <externalMetadataColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InsClass]"
+                      codePage="1251"
+                      dataType="str"
+                      length="2"
+                      name="InsClass" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PolisNumber]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PolisNumber]"
+                      name="PolisNumber" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InsType]"
+                      dataType="wstr"
+                      length="10"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InsType]"
+                      name="InsType" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InsClass]"
+                      codePage="1251"
+                      dataType="str"
+                      length="2"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InsClass]"
+                      name="InsClass" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[BeginingDate]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[BeginingDate]"
+                      name="BeginingDate" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CancelDate]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CancelDate]"
+                      name="CancelDate" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PlanedSum]"
+                      dataType="numeric"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PlanedSum]"
+                      name="PlanedSum"
+                      precision="38"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OnReturnSum]"
+                      dataType="numeric"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OnReturnSum]"
+                      name="OnReturnSum"
+                      precision="38"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Comment]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Comment]"
+                      name="Comment" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Initiators]"
+                      codePage="1251"
+                      dataType="str"
+                      length="13"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Initiators]"
+                      name="Initiators" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DateKey]"
+                      dataType="i8"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DateKey]"
+                      name="DateKey" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\ToDataBus.Paths[OLE DB Source Output]"
+              endId="Package\ToDataBus\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="OLE DB Source Output"
+              startId="Package\ToDataBus\OLE DB Source.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\TwhAcc"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:Disabled="True"
+      DTS:DTSID="{DEA3753F-7FBC-4931-94BD-005FC2B60C80}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="TwhAcc"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\TwhAcc\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[NBU_KZ_Terminated]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\TwhAcc\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[hq01db01.DataBus]"
+                  connectionManagerRefId="Package.ConnectionManagers[hq01db01.DataBus]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PolisNumber]"
+                      cachedDataType="wstr"
+                      cachedLength="150"
+                      cachedName="PolisNumber"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PolisNumber]"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[PolisNumber]" />
+                    <inputColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[BeginingDate]"
+                      cachedDataType="dbDate"
+                      cachedName="BeginingDate"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[BeginingDate]"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[BeginingDate]" />
+                    <inputColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[CancelDate]"
+                      cachedDataType="dbDate"
+                      cachedName="CancelDate"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CancelDate]"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[CancelDate]" />
+                    <inputColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[INNEDRPOU]"
+                      cachedDataType="wstr"
+                      cachedLength="15"
+                      cachedName="INNEDRPOU"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[INNEDRPOU]"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[INNEDRPOU]" />
+                    <inputColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[DateKey]"
+                      cachedDataType="i4"
+                      cachedName="DateKey"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DateKey]"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[DateKey]" />
+                    <inputColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[InsCode]"
+                      cachedDataType="wstr"
+                      cachedLength="10"
+                      cachedName="InsCode"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsType]"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsCode]" />
+                    <inputColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Payment]"
+                      cachedDataType="numeric"
+                      cachedName="Payment"
+                      cachedPrecision="38"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PlanedSum]"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Payment]" />
+                    <inputColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ReturnSum]"
+                      cachedDataType="numeric"
+                      cachedName="ReturnSum"
+                      cachedPrecision="38"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[OnReturnSum]"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[ReturnSum]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[id]"
+                      dataType="i8"
+                      name="id" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PolisNumber]"
+                      dataType="wstr"
+                      length="255"
+                      name="PolisNumber" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InsType]"
+                      dataType="i4"
+                      name="InsType" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[BeginingDate]"
+                      dataType="dbDate"
+                      name="BeginingDate" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CancelDate]"
+                      dataType="dbDate"
+                      name="CancelDate" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PlanedSum]"
+                      dataType="numeric"
+                      name="PlanedSum"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[OnReturnSum]"
+                      dataType="numeric"
+                      name="OnReturnSum"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[INNEDRPOU]"
+                      dataType="wstr"
+                      length="50"
+                      name="INNEDRPOU" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DateKey]"
+                      dataType="i8"
+                      name="DateKey" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\TwhAcc\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\TwhAcc\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\TwhAcc\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\TwhAcc\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">Declare @StartDat  int = ? , @EndDat int = ? 
+
+SELECT
+    a.PolisNumber,
+    a.InsCode,
+    a.BeginingDate,
+    a.CancelDate,
+	   SUM(ISNULL(x.SumISUM_11, 0)) AS Payment,
+    SUM(a.ISUM) AS ReturnSum,
+    COALESCE(NULLIF(f.IdentificationCode, ''), f.EDRPOU) AS INNEDRPOU,
+    a.DateKey
+ 
+FROM DWHWarehouse.fact.TwhAcc a
+INNER JOIN OrantaSch.dbo.products p 
+    ON a.ProductGid = p.gid
+INNER JOIN Metis.dbo.Faces f 
+    ON f.gid = p.InsurerFaceGID
+
+OUTER APPLY (
+    SELECT SUM(t2.ISUM) AS SumISUM_11
+    FROM DWHWarehouse.fact.TwhAcc t2
+    WHERE t2.ProgramGid = a.ProgramGid
+      AND t2.PgType = '1.1'
+      AND t2.DateKey &lt;= a.DateKey
+) x
+
+WHERE a.PgType IN ('7.2.1','7.3.1', '5.1')
+   AND a.DateKey between @StartDat and  @EndDat
+
+GROUP BY  a.PolisNumber, a.InsCode, a.BeginingDate, a.CancelDate, a.DateKey,
+    COALESCE(NULLIF(f.IdentificationCode, ''), f.EDRPOU)
+HAVING SUM(a.ISUM)  &lt;&gt; 0</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping">"Parameter0:Input",{812CA275-DD13-48CB-9C76-11D08C5613EE};"Parameter1:Input",{433BBBF8-3B04-4110-B1A1-B451BC31701A};</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\TwhAcc\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[hq01db02.Accounts]"
+                  connectionManagerRefId="Package.ConnectionManagers[hq01db02.Accounts]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[PolisNumber]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PolisNumber]"
+                      length="150"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[PolisNumber]"
+                      name="PolisNumber"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsCode]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InsCode]"
+                      length="10"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[InsCode]"
+                      name="InsCode"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[BeginingDate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[BeginingDate]"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[BeginingDate]"
+                      name="BeginingDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[CancelDate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CancelDate]"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[CancelDate]"
+                      name="CancelDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Payment]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Payment]"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Payment]"
+                      name="Payment"
+                      precision="38"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[ReturnSum]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ReturnSum]"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[ReturnSum]"
+                      name="ReturnSum"
+                      precision="38"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[INNEDRPOU]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[INNEDRPOU]"
+                      length="15"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[INNEDRPOU]"
+                      name="INNEDRPOU"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[DateKey]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DateKey]"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].Columns[DateKey]"
+                      name="DateKey"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PolisNumber]"
+                      dataType="wstr"
+                      length="150"
+                      name="PolisNumber" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InsCode]"
+                      dataType="wstr"
+                      length="10"
+                      name="InsCode" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[BeginingDate]"
+                      dataType="dbDate"
+                      name="BeginingDate" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CancelDate]"
+                      dataType="dbDate"
+                      name="CancelDate" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Payment]"
+                      dataType="numeric"
+                      name="Payment"
+                      precision="38"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ReturnSum]"
+                      dataType="numeric"
+                      name="ReturnSum"
+                      precision="38"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[INNEDRPOU]"
+                      dataType="wstr"
+                      length="15"
+                      name="INNEDRPOU" />
+                    <externalMetadataColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DateKey]"
+                      dataType="i4"
+                      name="DateKey" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PolisNumber]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PolisNumber]"
+                      name="PolisNumber" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InsCode]"
+                      dataType="wstr"
+                      length="10"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InsCode]"
+                      name="InsCode" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[BeginingDate]"
+                      dataType="dbDate"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[BeginingDate]"
+                      name="BeginingDate" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CancelDate]"
+                      dataType="dbDate"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CancelDate]"
+                      name="CancelDate" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Payment]"
+                      dataType="numeric"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Payment]"
+                      name="Payment"
+                      precision="38"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ReturnSum]"
+                      dataType="numeric"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ReturnSum]"
+                      name="ReturnSum"
+                      precision="38"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[INNEDRPOU]"
+                      dataType="wstr"
+                      length="15"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[INNEDRPOU]"
+                      name="INNEDRPOU" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DateKey]"
+                      dataType="i4"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DateKey]"
+                      name="DateKey" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\TwhAcc.Paths[OLE DB Source Output]"
+              endId="Package\TwhAcc\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="OLE DB Source Output"
+              startId="Package\TwhAcc\OLE DB Source.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\UPD 3_1 OR 2_1"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{A5D61709-CAF1-48AE-9B23-00B400664D8E}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="UPD 3_1 OR 2_1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{EA537F56-00A2-4F72-A287-06454344BBDC}"
+          SQLTask:SqlStatementSource="UPDATE b &#xA;SET PlanedSum = a.[ISUM]&#xA;FROM &#xA;(SELECT t.ProgramGid, SUM([ISUM]) [ISUM]&#xA;  FROM [DWHWarehouse].[fact].[TwhAcc] t &#xA;INNER JOIN  Accounts.dbo.PG7PG5_Stage_V1 a&#xA;ON t.ProgramGid = a.ProgramGid &#xA;and  a.PlanedSum=0 &#xA;and t.PgType in ('3.1')&#xA;GROUP BY t.ProgramGid&#xA;) a ,  Accounts.dbo.PG7PG5_Stage_V1 b &#xA;WHERE a.ProgramGid = b.ProgramGid &#xA;AND b.PlanedSum =0&#xA;&#xA;/*           2.1       */&#xA;&#xA;UPDATE b &#xA;SET PlanedSum = a.[ISUM]&#xA;FROM &#xA;(SELECT t.ProgramGid, SUM([ISUM]) [ISUM]&#xA;  FROM [DWHWarehouse].[fact].[TwhAcc] t &#xA;INNER JOIN  Accounts.dbo.PG7PG5_Stage_V1 a&#xA;ON t.ProgramGid = a.ProgramGid &#xA;and  a.PlanedSum=0 &#xA;and t.PgType in ('2.1')&#xA;GROUP BY t.ProgramGid&#xA;) a ,  Accounts.dbo.PG7PG5_Stage_V1 b &#xA;WHERE a.ProgramGid = b.ProgramGid &#xA;AND b.PlanedSum =0&#xA;&#xA;/*           InsClass                 */&#xA;&#xA;UPDATE b &#xA;SET InsClass = a.Code&#xA;From &#xA;( Select ProgramGid, ic.Code From Accounts.dbo.PG7PG5_Stage_V1 a&#xA;INNER JOIN OrantaSch.dbo.Programs pg on pg.GID=a.ProgramGid&#xA;Inner Join [OrantaSch].[meta].[ProgramTypes] pt ON pt.gid=pg.ProgramTypeGID&#xA;&#x9;Inner Join [OrantaSch].[meta].[InsuranceClasses] ic on ic.gid=pt.InsuranceClassGID&#xA;) a , Accounts.dbo.PG7PG5_Stage_V1 b&#xA;Where a.ProgramGid= b.ProgramGid&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{0A58451D-AEB2-46D4-9567-064B8B9BF32E}"
+      DTS:From="Package\CLEAR"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\STG_Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{6FAE6B47-5250-4354-B94C-09D9D5D38E56}"
+      DTS:From="Package\STG_Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\UPD 3_1 OR 2_1" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{CFFFF632-011A-4497-B429-22D778D3CEBD}"
+      DTS:From="Package\UPD 3_1 OR 2_1"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\ToDataBus" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="110,42"
+          Id="Package\CLEAR"
+          TopLeft="98,58" />
+        <NodeLayout
+          Size="130,42"
+          Id="Package\STG_Table"
+          TopLeft="88,163" />
+        <NodeLayout
+          Size="130,42"
+          Id="Package\ToDataBus"
+          TopLeft="297,285" />
+        <NodeLayout
+          Size="115,42"
+          Id="Package\TwhAcc"
+          TopLeft="761,91" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="153,100">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,63"
+              Start="0,0"
+              End="0,55.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,55.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="158,42"
+          Id="Package\UPD 3_1 OR 2_1"
+          TopLeft="73,280" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="152.5,205">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,75"
+              Start="0,0"
+              End="0,67.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,67.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="231,303.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="66,0"
+              Start="0,0"
+              End="58.5,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="58.5,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\ToDataBus">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="150,42"
+          Id="Package\ToDataBus\OLE DB Source"
+          TopLeft="105,89" />
+        <NodeLayout
+          Size="171,42"
+          Id="Package\ToDataBus\OLE DB Destination"
+          TopLeft="108,215" />
+        <EdgeLayout
+          Id="Package\ToDataBus.Paths[OLE DB Source Output]"
+          TopLeft="180,131">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="13.5,84"
+              Start="0,0"
+              End="13.5,76.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,38" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,38"
+                    Point2="0,42"
+                    Point3="4,42" />
+                  <mssgle:LineSegment
+                    End="9.5,42" />
+                  <mssgle:CubicBezierSegment
+                    Point1="9.5,42"
+                    Point2="13.5,42"
+                    Point3="13.5,46" />
+                  <mssgle:LineSegment
+                    End="13.5,76.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\ToDataBus\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\ToDataBus\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\TwhAcc">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="171,42"
+          Id="Package\TwhAcc\OLE DB Destination"
+          TopLeft="74,246" />
+        <NodeLayout
+          Size="150,42"
+          Id="Package\TwhAcc\OLE DB Source"
+          TopLeft="86,98" />
+        <EdgeLayout
+          Id="Package\TwhAcc.Paths[OLE DB Source Output]"
+          TopLeft="160.25,140">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,106"
+              Start="0,0"
+              End="0,98.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,98.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\TwhAcc\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\TwhAcc\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
