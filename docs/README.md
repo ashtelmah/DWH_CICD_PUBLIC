@@ -1,13 +1,13 @@
 # Documentation
 
-Документація проєкту.
+Project documentation.
 
-## Структура
+## Structure
 
-- **architecture/** — архітектурні діаграми та опис компонентів.
-- **pipelines/** — опис CI/CD пайплайнів.
-- **standards/** — стандарти коду, naming conventions, best practices.
+- **architecture/** — architecture diagrams and component descriptions.
+- **pipelines/** — CI/CD pipeline documentation.
+- **standards/** — coding standards, naming conventions, and best practices.
 
-## Призначення
+## Purpose
 
-Забезпечує прозорість та стандартизацію DWH‑процесів.
+Provides transparency and standardization of DWH processes.
